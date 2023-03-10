@@ -3,11 +3,13 @@ var uniqueValidator = require("mongoose-unique-validator");
 var slug = require("slug");
 var User = mongoose.model("User");
 
+var defaultIMG = "../imgs/placeholder.png";
+
 var ItemSchema = new mongoose.Schema(
   {
     slug: { type: String, lowercase: true, unique: true },
-    title: {type: String, required: [true, "can't be blank"]},
-    description: {type: String, required: [true, "can't be blank"]},
+    title: { type: String, required: [true, "can't be blank"] },
+    description: { type: String, required: [true, "can't be blank"] },
     image: String,
     favoritesCount: { type: Number, default: 0 },
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
@@ -19,7 +21,7 @@ var ItemSchema = new mongoose.Schema(
 
 ItemSchema.plugin(uniqueValidator, { message: "is already taken" });
 
-ItemSchema.pre("validate", function(next) {
+ItemSchema.pre("validate", function (next) {
   if (!this.slug) {
     this.slugify();
   }
@@ -27,29 +29,29 @@ ItemSchema.pre("validate", function(next) {
   next();
 });
 
-ItemSchema.methods.slugify = function() {
+ItemSchema.methods.slugify = function () {
   this.slug =
     slug(this.title) +
     "-" +
     ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
 };
 
-ItemSchema.methods.updateFavoriteCount = function() {
+ItemSchema.methods.updateFavoriteCount = function () {
   var item = this;
 
-  return User.count({ favorites: { $in: [item._id] } }).then(function(count) {
+  return User.count({ favorites: { $in: [item._id] } }).then(function (count) {
     item.favoritesCount = count;
 
     return item.save();
   });
 };
 
-ItemSchema.methods.toJSONFor = function(user) {
+ItemSchema.methods.toJSONFor = function (user) {
   return {
     slug: this.slug,
     title: this.title,
     description: this.description,
-    image: this.image,
+    image: this.image !== "" ? this.image : defaultIMG,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
     tagList: this.tagList,

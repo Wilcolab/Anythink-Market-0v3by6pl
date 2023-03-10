@@ -38,7 +38,7 @@ const ItemPreview = (props) => {
     >
       <img
         alt="item"
-        src={item.image != "" ? item.image : defaultIMG}
+        src={item.image !== "" ? item.image : defaultIMG}
         className="card-img-top item-img"
         style={{ borderRadius: "20px" }}
       />
