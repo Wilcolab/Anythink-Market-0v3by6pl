@@ -3,7 +3,7 @@ var uniqueValidator = require("mongoose-unique-validator");
 var slug = require("slug");
 var User = mongoose.model("User");
 
-var defaultIMG = "../imgs/placeholder.png";
+var defaultIMG = "/placeholder.png";
 
 var ItemSchema = new mongoose.Schema(
   {
