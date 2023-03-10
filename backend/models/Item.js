@@ -51,7 +51,7 @@ ItemSchema.methods.toJSONFor = function (user) {
     slug: this.slug,
     title: this.title,
     description: this.description,
-    image: this.image !== "" ? this.image : defaultIMG,
+    image: this.image || defaultIMG,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
     tagList: this.tagList,
